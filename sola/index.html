@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sola Persona Expansion</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600&display=swap">
+<style>
+/* Layout: one dark panel that sits inside lylucychang.com (#222 ground). Video frame left, decisions right; stacks on phones. */
+:root{
+  --bg:#222222;        /* matches the Adobe Portfolio page ground */
+  --panel:#2a2a2a;
+  --line:#3a3a3a;
+  --fg:#eeeeee;        /* site title color */
+  --muted:#9a9a9a;     /* site body color */
+  --orig:#b9a58c;      /* warm, faded: the brand's original */
+  --remake:#f2c14e;    /* the remake, one bright accent */
+  --display:"Inter Tight","Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:14px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:40px}
+[hidden]{display:none!important}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(20px,2.6vw,26px);line-height:1.2;margin:4px 0 0;text-wrap:balance}
+
+/* ---------- Component 1: original vs remake ---------- */
+.cmp{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:720px){.cmp{grid-template-columns:minmax(0,1fr)}}
+.stage{display:grid;gap:10px}
+.toggle{display:grid;grid-template-columns:1fr 1fr;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px;position:relative}
+.toggle button{all:unset;cursor:pointer;text-align:center;padding:9px 0;border-radius:999px;font-weight:600;font-size:13px;letter-spacing:.02em;color:var(--muted);position:relative;z-index:1;transition:color .2s}
+.toggle button[aria-pressed="true"]{color:#1b1b1b}
+.toggle .pill{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--orig);transition:transform .35s cubic-bezier(.2,.8,.2,1),background .35s}
+.toggle[data-mode="remake"] .pill{transform:translateX(100%);background:var(--remake)}
+.toggle button:focus-visible,.sub button:focus-visible,.steps button:focus-visible,.sound:focus-visible{outline:2px solid var(--remake);outline-offset:2px}
+.frame{position:relative;aspect-ratio:9/16;max-width:100%;background:#151515;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.frame video,.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .35s}
+.frame .off{opacity:0;pointer-events:none}
+.tag{position:absolute;left:10px;top:10px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border-radius:4px;background:rgba(0,0,0,.55);color:var(--fg)}
+.sound{all:unset;cursor:pointer;position:absolute;right:10px;bottom:10px;font-size:11px;font-weight:600;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:var(--fg)}
+.thumbs{display:grid;gap:6px}
+.thumbs .hint{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{display:flex;gap:8px}
+.sub button{all:unset;cursor:pointer;position:relative;width:64px;aspect-ratio:9/14;border-radius:6px;overflow:hidden;border:2px solid var(--line);background:#151515;transition:border-color .2s,opacity .2s,transform .2s}
+.sub button img{width:100%;height:100%;object-fit:cover;display:block}
+.sub button:hover{transform:translateY(-2px)}
+.sub .play{position:absolute;inset:auto auto 4px 4px;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.65);display:grid;place-items:center}
+.sub .play::after{content:"";border-left:6px solid var(--fg);border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
+[data-mode="original"] .sub button[aria-pressed="true"]{border-color:var(--orig)}
+[data-mode="remake"] .sub button{opacity:.5}
+
+.diff{display:grid;gap:0;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:140px minmax(0,1fr);gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+@media (max-width:460px){.row{grid-template-columns:minmax(0,1fr);gap:6px}}
+.row .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.row .v{position:relative;min-height:1.6em}
+.row .v p{margin:0;transition:opacity .3s,transform .3s}
+.row .v .o{color:var(--orig)}
+.row .v .r{color:var(--fg)}
+.row .v .r b{color:var(--remake);font-weight:600}
+[data-mode="original"] .row .v .r,[data-mode="remake"] .row .v .o{position:absolute;inset:0 0 auto;opacity:0;transform:translateY(4px);pointer-events:none}
+.row.only-remake{transition:opacity .3s}
+[data-mode="original"] .row.only-remake{opacity:.35}
+.note{font-size:12px;color:var(--muted);margin:14px 0 0}
+
+/* ---------- Component 2: angle to execution ---------- */
+.flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,260px);gap:28px;align-items:start}
+@media (max-width:720px){.flow{grid-template-columns:minmax(0,1fr)}}
+.steps{display:flex;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex-wrap:wrap}
+.steps button{all:unset;cursor:pointer;flex:1 1 0;min-width:84px;text-align:center;padding:12px 6px;font-size:12px;font-weight:600;color:var(--muted);border-right:1px solid var(--line);position:relative}
+.steps button:last-child{border-right:0}
+.steps button[aria-selected="true"]{color:#1b1b1b;background:var(--remake)}
+.steps button .n{display:block;font-size:10px;font-weight:500;letter-spacing:.1em;opacity:.7}
+.card{margin-top:18px;min-height:150px}
+.card h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 8px}
+.card p{margin:0;max-width:62ch;color:#cfcfcf}
+.card blockquote{margin:12px 0 0;padding-left:12px;border-left:2px solid var(--remake);color:var(--fg);font-style:italic}
+.nav{display:flex;gap:10px;margin-top:16px}
+.nav button{all:unset;cursor:pointer;font-size:12px;color:var(--muted);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.nav button:disabled{opacity:.3;cursor:default}
+.mini{aspect-ratio:9/16;max-width:260px;width:100%}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Prototype 1 -->
+  <section id="toggle" aria-label="Original versus remake">
+    <div class="eyebrow">Persona expansion test · Sola Wood Flowers</div>
+    <h2>Same product. A buyer their ads never talk to.</h2>
+    <div class="cmp" style="margin-top:20px" data-mode="original" id="cmp">
+      <div class="stage">
+        <div class="toggle" id="tg" data-mode="original" role="group" aria-label="Show original or remake">
+          <span class="pill" aria-hidden="true"></span>
+          <button type="button" id="btn-orig" aria-pressed="true">Original</button>
+          <button type="button" id="btn-remake" aria-pressed="false">Remake</button>
+        </div>
+        <div class="frame">
+          <video id="v-orig" src="media/sola-original-bridal.mp4" poster="media/sola-original-poster.jpg" muted loop playsinline autoplay preload="metadata"></video>
+          <img id="i-bfcm1" class="off" src="media/sola-original-bfcm-1.jpg" alt="Sola BFCM ad: discount stack">
+          <img id="i-bfcm2" class="off" src="media/sola-original-bfcm-2.jpg" alt="Sola BFCM ad: second discount variant">
+          <video id="v-remake" class="off" src="media/sola-remake.mp4" poster="media/sola-remake-poster.jpg" muted loop playsinline preload="metadata"></video>
+          <span class="tag" id="tag">Brand's active ad</span>
+          <button type="button" class="sound" id="sound">Sound on</button>
+        </div>
+        <div class="thumbs">
+        <div class="hint">The brand's active ads</div>
+        <div class="sub" id="sub" role="group" aria-label="The brand's active ads">
+          <button type="button" data-src="v-orig" aria-pressed="true" aria-label="Brand's active video ad"><img src="media/sola-original-poster.jpg" alt=""><span class="play" aria-hidden="true"></span></button>
+          <button type="button" data-src="i-bfcm1" aria-pressed="false" aria-label="Brand's BFCM ad 1"><img src="media/sola-original-bfcm-1.jpg" alt=""></button>
+          <button type="button" data-src="i-bfcm2" aria-pressed="false" aria-label="Brand's BFCM ad 2"><img src="media/sola-original-bfcm-2.jpg" alt=""></button>
+        </div>
+        </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="diff">
+          <div class="row"><div class="k">Who it speaks to</div><div class="v">
+            <p class="o">Brides cutting wedding costs. A proven audience, but almost the only one.</p>
+            <p class="r">The partner as the <b>buyer</b>, not the receiver: gifting in the everyday dating scene.</p></div></div>
+          <div class="row"><div class="k">Hook</div><div class="v">
+            <p class="o">BFCM runs as pure discount stacks, with no buyer signal to stop on.</p>
+            <p class="r">An objection: a young woman who <b>"doesn't like flowers."</b> The contradiction stops casual scrollers and high-intent flower buyers alike.</p></div></div>
+          <div class="row"><div class="k">Reason to buy</div><div class="v">
+            <p class="o">Savings, framed for a wedding budget.</p>
+            <p class="r">Her ROI logic, in the buyer's own terms: <b>no watering, no weekly cost</b>, less spend for both of them.</p></div></div>
+          <div class="row only-remake"><div class="k">The turn</div><div class="v">
+            <p class="o">No emotional payoff for the giver.</p>
+            <p class="r"><b>"Every time I walk past, guess who I think about."</b> Lasting flowers become a gift that pays the giver back.</p></div></div>
+        </div>
+        <p class="note">Spec work to explore, not replace, a second segment. Not commissioned by or affiliated with Sola.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prototype 2 -->
+  <section id="breakdown" aria-label="Angle to execution">
+    <div class="eyebrow">Angle to execution · Sola Wood Flowers</div>
+    <h2>How the remake was built, one decision at a time</h2>
+    <div class="flow" style="margin-top:20px">
+      <div>
+        <div class="steps" role="tablist" id="steps"></div>
+        <div class="card" id="card" role="tabpanel" aria-live="polite"></div>
+        <div class="nav"><button type="button" id="prev">← Back</button><button type="button" id="next">Next →</button></div>
+      </div>
+      <div class="frame mini"><video src="media/sola-remake.mp4" poster="media/sola-remake-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><span class="tag">Remake</span></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  /* ----- Prototype 1 ----- */
+  const cmp=document.getElementById('cmp'), tg=document.getElementById('tg');
+  const vO=document.getElementById('v-orig'), vR=document.getElementById('v-remake');
+  const sub=document.getElementById('sub'), tag=document.getElementById('tag'), snd=document.getElementById('sound');
+  const layers={'v-orig':vO,'i-bfcm1':document.getElementById('i-bfcm1'),'i-bfcm2':document.getElementById('i-bfcm2'),'v-remake':vR};
+  const labels={'v-orig':"Brand's active ad",'i-bfcm1':"Brand's active ad · BFCM",'i-bfcm2':"Brand's active ad · BFCM",'v-remake':'Remake · partner as buyer'};
+  let origLayer='v-orig', mode='original', soundOn=false;
+  function show(id){
+    for(const k in layers){const el=layers[k];const on=k===id;el.classList.toggle('off',!on);
+      if(el.tagName==='VIDEO'){ if(on){el.muted=!soundOn;el.play().catch(()=>{});} else el.pause(); }}
+    tag.textContent=labels[id]; snd.hidden=layers[id].tagName!=='VIDEO';
+  }
+  function setMode(m){
+    mode=m; cmp.dataset.mode=m; tg.dataset.mode=m;
+    document.getElementById('btn-orig').setAttribute('aria-pressed',m==='original');
+    document.getElementById('btn-remake').setAttribute('aria-pressed',m==='remake');
+    show(m==='original'?origLayer:'v-remake');
+  }
+  document.getElementById('btn-orig').onclick=()=>setMode('original');
+  document.getElementById('btn-remake').onclick=()=>setMode('remake');
+  sub.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    origLayer=b.dataset.src; sub.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); setMode('original');
+  });
+  snd.onclick=()=>{soundOn=!soundOn; snd.textContent=soundOn?'Sound off':'Sound on';
+    [vO,vR].forEach(v=>v.muted=!soundOn||v.classList.contains('off'));};
+  setMode('original');
+
+  /* ----- Prototype 2 ----- */
+  const S=[
+    {k:'Insight',h:'Their ads talk to one person',p:"Sola's active ads speak almost only to brides cutting wedding costs, and their BFCM ads are pure discount stacks with no buyer signal. Everyday gifting between partners is left unaddressed."},
+    {k:'Angle',h:'Make the partner the buyer',p:'Flip the usual frame: the person buying flowers, not the one receiving them. The goal is to test a second segment, not replace the bridal one.'},
+    {k:'Hook',h:'Open on an objection',p:'A young woman who "doesn’t like flowers." The contradiction between character and product stops casual scrollers, and it speaks to high-intent buyers who already purchase flowers often.',q:'I don’t like flowers.'},
+    {k:'Script',h:'Sell it in the buyer’s terms',p:'Her ROI logic does the persuading: no watering, no weekly cost, less spend for both people. Then the turn ties lasting flowers to a gift that pays the giver back.',q:'Every time I walk past, guess who I think about.'},
+    {k:'Execution',h:'Written, performed and cut in-house',p:'A UGC-style direct-to-camera skit: scripted, lit, filmed, performed on camera and edited by me, so the read of the character stays exactly as written.'}
+  ];
+  const steps=document.getElementById('steps'), card=document.getElementById('card');
+  const prev=document.getElementById('prev'), next=document.getElementById('next');
+  let i=0;
+  S.forEach((s,n)=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.id='step-'+n;
+    b.innerHTML='<span class="n">STEP '+(n+1)+'</span>'+s.k; b.onclick=()=>go(n); steps.appendChild(b);});
+  function go(n){ i=n; const s=S[n];
+    steps.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-selected',j===n));
+    card.innerHTML='<h3></h3><p></p>'+(s.q?'<blockquote></blockquote>':'');
+    card.querySelector('h3').textContent=s.h; card.querySelector('p').textContent=s.p;
+    if(s.q) card.querySelector('blockquote').textContent='“'+s.q+'”';
+    prev.disabled=n===0; next.disabled=n===S.length-1; }
+  prev.onclick=()=>go(Math.max(0,i-1)); next.onclick=()=>go(Math.min(S.length-1,i+1));
+  go(0);
+
+  /* Embed one prototype at a time: page#toggle or page#breakdown */
+  function route(){const h=location.hash.slice(1);
+    document.getElementById('toggle').hidden = h==='breakdown';
+    document.getElementById('breakdown').hidden = h==='toggle';}
+  addEventListener('hashchange',route); route();
+})();
+</script>
+</body>
+</html>
